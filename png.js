@@ -1,6 +1,6 @@
 const fs=require('fs')
-const dir='../m3/' //定义目录
-const m3u8='1.m3u8'//定义m3u8文件名称
+const dir='../m3/' //定义切片文件目录
+const m3u8='1.m3u8'//定义切片m3u8文件名称
 !async function png(params) {
     let files=fs.readdirSync(dir)
         if (files) {

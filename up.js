@@ -6,7 +6,7 @@ async function upload(name,params) {
     let n=name
     let p=params
       await request.post({
-                url: "https://api.open.oppomobile.com/api/utility/upload",
+                url: "https://api.com/api/utility/upload",//上传图床接口
                 formData:{
                    type:'feedback',
                     file:{
