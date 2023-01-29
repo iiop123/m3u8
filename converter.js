@@ -19,6 +19,5 @@ async function randomString(len) {
        old=old.replace(key,json[key])
         }
         fs.writeFileSync(await randomString()+'.m3u8',old)
-        fs.writeFileSync('./ok.json',JSON.stringify([]))
         fs.writeFileSync('./q.json',JSON.stringify({}))
 }()
