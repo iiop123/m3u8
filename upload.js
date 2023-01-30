@@ -5,26 +5,26 @@ const dir=require('./png')
 async function upload(name,params) {
     let n=name
     let p=params
-      await request.post({
-                url: "https://api.com/api/utility/upload",//上传图床接口
-                formData:{
-                   type:'feedback',
-                    file:{
-                        value:params,
-                        options: {
-                            filename: 'topsecret.png',
-                            contentType: 'image/jpeg'
-                          }
-                    }
-                }
-            },(err,data,body)=>{
+       request.post({
+        url: "https://api.open.oppomobile.com/api/utility/upload",
+        formData:{
+            type:'feedback',
+            file:{
+                value:fs.createReadStream(params),
+                options: {
+                    filename: 'blob.png',
+                    contentType: 'image/png'
+                  }
+            }
+        },
+    },(err,data,body)=>{
                 if (err) {
                     console.log(err);
                     upload(n,p)
                 }
                 if (body) {
                     png[name]=JSON.parse(body).data.url
-                    return fs.writeFileSync('./q.json',JSON.stringify(png,null,'\t'))
+                   return fs.writeFileSync('./q.json',JSON.stringify(png,null,'\t'))
                 }
             });
         }
@@ -47,7 +47,7 @@ async function upload(name,params) {
             
                
                for (let i = 0; i < files.length; i++) { 
-                   upload(files[i],fs.createReadStream(dir.dir+files[i].split('.')[0]+'.png'))
+                   upload(files[i],dir.dir+files[i].split('.')[0]+'.png')
                  }
          
        }}()
