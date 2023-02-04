@@ -1,5 +1,6 @@
 const fs=require('fs')
 const dir=require('./png')
+let png
 setInterval(async function (params) {
     let files=fs.readdirSync(dir.dir)
     if (files) {
@@ -12,10 +13,17 @@ setInterval(async function (params) {
        files.forEach(e=>{
         return f.push(e.split('.')[0]+'.ts')
        })
-       files=f.filter(e=>{
-        let png=JSON.parse(fs.readFileSync('./q.json').toString())
-        return !png.hasOwnProperty(e)
-       })
-       console.log('上传还剩'+files.length);
+         fs.readFile('./q.json',(err,data)=>{
+        if (data) {
+        png=JSON.parse(data.toString())
+        files=f.filter(e=>{
+            return !png.hasOwnProperty(e)
+        })
+        params(files.length)
+        }
+     })
+     
  
-}},3000)
+}},3000,function (params) {
+    console.log('剩余数量'+params);
+})

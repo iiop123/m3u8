@@ -14,11 +14,19 @@ async function length(params) {
        files.forEach(e=>{
         return f.push(e.split('.')[0]+'.ts')
        })
-       files=f.filter(e=>{
-        png=JSON.parse(gf.readFileSync('./q.json').toString())
-        return !png.hasOwnProperty(e)
-       })
-       return files.length
+        fs.readFile('./q.json',(err,data)=>{
+        if (data) {
+        try {
+            png=JSON.parse(data.toString())
+        } catch (error) {
+            return length()
+        }
+        files=f.filter(e=>{
+            return !png.hasOwnProperty(e)
+        })
+        params(files.length)
+        }
+     })
  
 }}
 module.exports=length
