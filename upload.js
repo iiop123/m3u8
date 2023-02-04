@@ -36,7 +36,7 @@ async function upload(name,params) {
                     png[name]=JSON.parse(body)
                     png[name]=JSON.parse(png[name].body).url
                    } catch (error) {
-                    upload(n,p)
+                    return upload(n,p)
                    }
                   gf.writeFile('./q.json',JSON.stringify(png,null,'\t'),e=>{
                     return

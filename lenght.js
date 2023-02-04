@@ -15,11 +15,7 @@ async function length(params) {
         return f.push(e.split('.')[0]+'.ts')
        })
        files=f.filter(e=>{
-        try {
-            png=JSON.parse(gf.readFileSync('./q.json').toString())
-        } catch (error) {
-           length()
-        }
+        png=JSON.parse(gf.readFileSync('./q.json').toString())
         return !png.hasOwnProperty(e)
        })
        return files.length
