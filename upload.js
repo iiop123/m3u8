@@ -4,18 +4,20 @@ const length=require('./lenght')
 let png=JSON.parse(fs.readFileSync('./q.json').toString())
 const dir=require('./png')
 const gf=require('graceful-fs')
-let num
+var shell = require('shelljs');
+var Bagpipe = require('bagpipe');
+// 设定最大并发数为10
+var bagpipe = new Bagpipe(5);
 let policy
 
 async function upload(name,params) {
     let n=name
     let p=params
-   
-        request.post({
-        url: "https://file.webapp.163.com/d5/file/new/",
+    let opt={
+        url: "http://www.syxwnet.com/ctapi/upload/image?file=file",
         formData:{
-            Authorization:policy,
-            fpfile:{
+           // Authorization:policy,
+         file:{
                 value:gf.createReadStream(params),
                 options: {
                     filename: '151.png',
@@ -25,32 +27,34 @@ async function upload(name,params) {
         },
         headers:{
             "user-agent":'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-            'origin':'https://ugc.id5.163.com/upload/',
+            'cookie':'zycna=ySPZsiKJYPwBAW8k+fpW/udu; PASSPORTID=3b700a40cffcb86c4827010c22953338'
+            //'origin':'https://ugc.id5.163.com/upload/',
             //'x-requested-with':'XMLHttpRequest'
         }
-    },(err,data,body)=>{
-                if (err) {
-              
-                    upload(n,p)
-                }
-                if (body) {
-                   try {
-                    let url=JSON.parse(body)
-                   url=JSON.parse(url.body).url
-                    url=url.split(/:\/\//)[1]
-                    png[name]='https://gimg2.baidu.com/image_search/app=2020&src='+url
-                    
-                    //png[name]=JSON.parse(png[name].body).url
-                   } catch (error) {
-                    
-                    return upload(n,p)
-                   }
-                   gf.writeFile('./q.json',JSON.stringify(png,null,'\t'),e=>{
-                    return
-                   })
-                    
-                }
-            });
+    }
+    let cb=(err,data,body)=>{
+        if (err) {
+            console.log(err);
+            upload(n,p)
+        }
+        if (body) {
+           try {
+           /* let url=JSON.parse(body)
+           url=JSON.parse(url.body).url*/
+           let url='http://img.syxwnet.com'+JSON.parse(body).data.url
+            url=url.split(/:\/\//)[1]
+            png[name]='https://gimg2.baidu.com/image_search/app=2020&src='+url
+           } catch (error) {
+            return upload(n,p)
+           }
+
+           gf.writeFile('./q.json',JSON.stringify(png,null,'\t'),e=>{
+            return
+           })
+            
+        }
+    }
+   bagpipe.push(request.post,opt,cb)
             
         }
         !async function upload_init(params) {
@@ -84,13 +88,14 @@ async function upload(name,params) {
                         _num.then(e=>{
                             console.log('上传剩余'+e);
                             if (e==0) {
+                                shell.exec('node converter.js')
                                 clearInterval(interval)
                             }
                         })
                })
             
           
-                fetch('https://kol2.tongren.163.com/filepicker/apps/h55/token?file_type=image&random=1675249064352').then(async res=>{
+               /* fetch('https://kol2.tongren.163.com/filepicker/apps/h55/token?file_type=image&random=1675249064352').then(async res=>{
                     try {
                         policy=await res.json()
                         policy=policy.data.token
@@ -99,7 +104,7 @@ async function upload(name,params) {
                     }
                 },async err=>{
                    return
-                })
+                })*/
                 
                },8000)
                for (let i = 0; i < files.length; i++) { 

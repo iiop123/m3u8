@@ -11,20 +11,17 @@ async function randomString(len) {
     　　}
     　　return result;
     }
-    async function upload(params) {
+    async function upload(params,filename) {
         let p=params
           await request.post({
-            url: "https://kf.dianping.com/api/file/burstUploadFile",
+            url: "https://img.dingding.wtf/api",
             formData:{
-                fileName:'x.jpg',
-                fileID:new Date().getTime(),
-                part:0,
-                partSize:1,
-                files:{
+               
+                img:{
                     value:params,
                     options: {
-                        filename: 'blob',
-                        contentType: 'application/octet-stream'
+                        filename: 'blob.png',
+                        contentType: 'image/jpeg'
                       }
                 }
             },
@@ -37,8 +34,19 @@ async function randomString(len) {
                         upload(p)
                     }
                     if (body) {
-                        console.log(JSON.parse(body).data.uploadPath);
+                        console.log(JSON.parse(body).link);
+                        
+                        let json=JSON.parse(fs.readFileSync('./list.json').toString())
+                        let date=new Date().toLocaleString()
+                        json[date]=JSON.parse(body).link
+                        fs.writeFileSync('./list.json',JSON.stringify(json,null,'\t'))
                         fs.writeFileSync('./q.json',JSON.stringify({}))
+                        fs.unlink(filename,e=>{
+                            if (e) {
+                                console.log(e);
+                            }
+                            console.log('文件删除成功');
+                        })
                     }
                 });
             }
@@ -49,7 +57,7 @@ async function randomString(len) {
     for (const key in json) {
        old=old.replace(key,json[key])
         }
-        const m3=await randomString()+'.png'
+       const m3=await randomString()+'.png'
         fs.writeFileSync(m3,old)
-        upload(fs.readFileSync(m3))
+        upload(fs.readFileSync(m3),m3)
 }()

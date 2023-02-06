@@ -1,5 +1,5 @@
 const fs=require('fs')
-const dir='../m3/' //定义切片目录
+const dir='../v-demo/big-file/' //定义切片目录
 const m3u8='1.m3u8'//定义切片m3u8文件名称
 const gif=fs.readFileSync('images.png')
 !async function png(params) {
