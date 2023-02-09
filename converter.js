@@ -36,11 +36,11 @@ async function randomString(len) {
                     if (body) {
                         console.log(JSON.parse(body).link);
                         
-                        let json=JSON.parse(fs.readFileSync('./list.json').toString())
+                        let json=JSON.parse(fs.readFileSync('./log/link.json').toString())
                         let date=new Date().toLocaleString()
                         json[date]=JSON.parse(body).link
-                        fs.writeFileSync('./list.json',JSON.stringify(json,null,'\t'))
-                        fs.writeFileSync('./q.json',JSON.stringify({}))
+                        fs.writeFileSync('./log/link.json',JSON.stringify(json,null,'\t'))
+                        fs.writeFileSync('./log/file.json',JSON.stringify({}))
                         fs.unlink(filename,e=>{
                             if (e) {
                                 console.log(e);
@@ -53,7 +53,7 @@ async function randomString(len) {
 !async function cov (params) {
     console.log('start cov');
     let old=fs.readFileSync(dir.dir+dir.m3u8).toString()
-    let json=JSON.parse(fs.readFileSync('./q.json'))
+    let json=JSON.parse(fs.readFileSync('./log/file.json'))
     for (const key in json) {
        old=old.replace(key,json[key])
         }

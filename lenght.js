@@ -14,7 +14,7 @@ async function length(params) {
        files.forEach(e=>{
         return f.push(e.split('.')[0]+'.ts')
        })
-        gf.readFile('./q.json',(err,data)=>{
+        gf.readFile('./log/file.json',(err,data)=>{
         if (data) {
         try {
             png=JSON.parse(data.toString())

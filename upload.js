@@ -1,7 +1,7 @@
 const fs=require('fs')
 const request=require('request')
 const length=require('./lenght')
-let png=JSON.parse(fs.readFileSync('./q.json').toString())
+let png=JSON.parse(fs.readFileSync('./log/file.json').toString())
 const dir=require('./png')
 const gf=require('graceful-fs')
 var shell = require('shelljs');
@@ -14,10 +14,10 @@ async function upload(name,params) {
     let n=name
     let p=params
     let opt={
-        url: "http://www.syxwnet.com/ctapi/upload/image?file=file",
+        url: "https://file.webapp.163.com/d5/file/new/",
         formData:{
-           // Authorization:policy,
-         file:{
+            Authorization:policy,
+           fpfile:{
                 value:gf.createReadStream(params),
                 options: {
                     filename: '151.png',
@@ -27,8 +27,7 @@ async function upload(name,params) {
         },
         headers:{
             "user-agent":'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-            'cookie':'zycna=ySPZsiKJYPwBAW8k+fpW/udu; PASSPORTID=3b700a40cffcb86c4827010c22953338'
-            //'origin':'https://ugc.id5.163.com/upload/',
+            'origin':'https://ugc.id5.163.com/upload/',
             //'x-requested-with':'XMLHttpRequest'
         }
     }
@@ -39,16 +38,16 @@ async function upload(name,params) {
         }
         if (body) {
            try {
-           /* let url=JSON.parse(body)
-           url=JSON.parse(url.body).url*/
-           let url='http://img.syxwnet.com'+JSON.parse(body).data.url
-            url=url.split(/:\/\//)[1]
-            png[name]='https://gimg2.baidu.com/image_search/app=2020&src='+url
+           let url=JSON.parse(body)
+           url=JSON.parse(url.body).url
+
+            //url=url.split(/:\/\//)[1]
+            png[name]=url
            } catch (error) {
             return upload(n,p)
            }
 
-           gf.writeFile('./q.json',JSON.stringify(png,null,'\t'),e=>{
+           gf.writeFile('./log/file.json',JSON.stringify(png,null,'\t'),e=>{
             return
            })
             
@@ -95,7 +94,7 @@ async function upload(name,params) {
                })
             
           
-               /* fetch('https://kol2.tongren.163.com/filepicker/apps/h55/token?file_type=image&random=1675249064352').then(async res=>{
+                fetch('https://kol2.tongren.163.com/filepicker/apps/h55/token?file_type=image&random=1675249064352').then(async res=>{
                     try {
                         policy=await res.json()
                         policy=policy.data.token
@@ -104,7 +103,7 @@ async function upload(name,params) {
                     }
                 },async err=>{
                    return
-                })*/
+                })
                 
                },8000)
                for (let i = 0; i < files.length; i++) { 
